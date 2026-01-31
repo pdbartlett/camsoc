@@ -7,18 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        /* Import Open Sans for Body Text */
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
         
         :root {
-            /* From branding guidelines */
-            --cambridge-blue: #8EE8D8;
-            --cambridge-dark: #133844;
+            /* Official University of Cambridge Brand Colors */
+            --cambridge-blue: #A3C1AD;
+            --cambridge-dark: #003B5C; /* University Navy */
+            
+            /* Typography Variables */
+            --font-heading: 'Feijoa', 'Charter', 'Bitstream Charter', 'Sitka Text', 'Cambria', 'Georgia', serif;
+            --font-body: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-body);
             background-color: #f8fafc;
-            color: #133844;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Heading Styles */
+        h1, h2, h3, h4, .font-serif-brand {
+            font-family: var(--font-heading);
+            letter-spacing: -0.01em;
         }
 
         .cambridge-bg { background-color: var(--cambridge-blue); }
@@ -40,11 +52,18 @@
     <header class="bg-white border-b-4 cambridge-border shadow-sm">
         <div class="max-w-[1440px] mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
             <div class="flex-shrink-0">
-                <!-- University Logo -->
-                <img src="uclogo.png"/>
+                <div class="w-[220px] h-[60px] flex items-center justify-center">
+                    <img src="uclogo.png" alt="University of Cambridge" class="max-h-full" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg style="display:none" width="220" height="60" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="University of Cambridge Fallback">
+                        <rect width="220" height="60" rx="4" fill="white"/>
+                        <path d="M20 15H35V45H20V15Z" fill="#003B5C"/>
+                        <text x="50" y="32" font-family="serif" font-weight="bold" font-size="20" fill="#003B5C">UNIVERSITY OF</text>
+                        <text x="50" y="52" font-family="serif" font-weight="bold" font-size="24" fill="#003B5C">CAMBRIDGE</text>
+                    </svg>
+                </div>
             </div>
             <div class="h-12 w-px bg-slate-200 hidden md:block"></div>
-            <h1 class="text-2xl md:text-3xl font-semibold cambridge-text text-center md:text-left">
+            <h1 class="text-2xl md:text-4xl font-bold cambridge-text text-center md:text-left leading-tight">
                 Berkshire and Oxfordshire Cambridge Society
             </h1>
         </div>
@@ -55,85 +74,83 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             <!-- Card 1: About the Society -->
-            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover">
+            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col">
                 <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
                     <i data-lucide="users" class="text-white"></i>
                 </div>
-                <h2 class="text-xl font-bold mb-4 cambridge-text">About the Society</h2>
-                <p class="text-slate-600 leading-relaxed mb-4">
+                <h2 class="text-2xl font-bold mb-4 cambridge-text">About the Society</h2>
+                <p class="text-slate-600 mb-4">
                     The Berks and Oxon Cambridge Society is long-established, and offers an active programme of excursions, visits, walks etc.
                 </p>
-                <p class="text-slate-600 leading-relaxed mb-2 font-medium">Fixtures in our calendar include:</p>
-                <ul class="text-slate-600 space-y-2 list-disc pl-5 mb-4 text-sm">
+                <p class="text-slate-600 mb-2 font-bold uppercase text-xs tracking-widest opacity-70">Fixtures in our calendar include:</p>
+                <ul class="text-slate-600 space-y-2 list-disc pl-5 mb-8 text-sm">
                     <li>Annual autumn lunch at Henley Business School (Greenlands) with an external speaker</li>
                     <li>Brief AGM with a pot luck lunch and presentation</li>
                     <li>Freshers' event at a bar in Reading</li>
                     <li>A weekend away in or around May</li>
                 </ul>
-                <p class="text-sm text-slate-500 pt-2">
+                <p class="mt-auto pt-6 text-sm text-slate-500 italic border-t border-slate-50">
                     Partners and guests are always welcome at our varied events.
                 </p>
             </section>
 
             <!-- Card 2: Events -->
-            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover">
+            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col">
                 <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
                     <i data-lucide="calendar" class="text-white"></i>
                 </div>
-                <h2 class="text-xl font-bold mb-4 cambridge-text">Events</h2>
-                <div class="space-y-4">
+                <h2 class="text-2xl font-bold mb-4 cambridge-text">Events</h2>
+                <div class="space-y-6 mb-8">
                     <div class="border-l-4 cambridge-border pl-4">
-                        <h3 class="font-semibold text-xs text-slate-500 uppercase tracking-wider">Upcoming</h3>
-                        <p class="font-medium">AGM</p>
-                        <p class="text-xs text-slate-400">14 Feb 2026 • Nettlebed Village Hall</p>
+                        <h3 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-1">Upcoming</h3>
+                        <p class="font-bold text-lg leading-tight">AGM</p>
+                        <p class="text-sm text-slate-500">14 Feb 2026 • Nettlebed Village Hall</p>
                     </div>
                     <div class="border-l-4 border-slate-200 pl-4">
-                        <h3 class="font-semibold text-xs text-slate-500 uppercase tracking-wider">Recent</h3>
-                        <p class="font-medium text-slate-500">Annual Greenlands lunch</p>
-                        <p class="text-xs text-slate-400">7 Nov 2025 • Henley Business School</p>
+                        <h3 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-1">Recent</h3>
+                        <p class="font-bold text-lg text-slate-600 leading-tight">Annual Greenlands lunch</p>
+                        <p class="text-sm text-slate-400">7 Nov 2025 • Henley Business School</p>
                     </div>
-                    <p class="text-sm text-slate-500 pt-2">
-                        Additional past events will be added as time permits. Please <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-blue-600 hover:underline">email us</a> if you have any questions.
-                    </p>
                 </div>
+                <p class="mt-auto pt-6 text-sm text-slate-500 italic border-t border-slate-50">
+                    Additional past events will be added as time permits. Please <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-blue-600 hover:underline font-semibold not-italic">email us</a> if you have any questions.
+                </p>
             </section>
 
             <!-- Card 3: How to Join -->
-            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover">
+            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col">
                 <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
                     <i data-lucide="mail" class="text-white"></i>
                 </div>
-                <h2 class="text-xl font-bold mb-4 cambridge-text">How to Join</h2>
+                <h2 class="text-2xl font-bold mb-4 cambridge-text">How to Join</h2>
                 <p class="text-slate-600 mb-6">
                     Membership is open to all alumni of the University of Cambridge residing in Berkshire or Oxfordshire.
                 </p>
                 
-                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200 space-y-5">
-                    <!-- Get in Touch Section -->
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 space-y-6 mb-8">
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Get in touch</p>
-                        <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-sm text-blue-700 hover:underline break-all block font-medium">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Get in touch</p>
+                        <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-sm text-blue-800 hover:underline break-all block font-bold">
                             secretary@camsoc-berksoxon.org.uk
                         </a>
                     </div>
                     
-                    <!-- Online Presence Section -->
-                    <div class="pt-4 border-t border-slate-200">
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Find us online</p>
-                        <div class="flex flex-wrap gap-x-6 gap-y-3">
-                            <a href="https://www.facebook.com/groups/2894160237505514" target="_blank" class="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors">
-                                <i data-lucide="facebook" class="w-4 h-4"></i>
-                                <span class="text-sm font-medium">Facebook</span>
+                    <div class="pt-5 border-t border-slate-200">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Find us online</p>
+                        <div class="flex flex-wrap gap-x-6 gap-y-4">
+                            <a href="https://www.facebook.com/groups/2894160237505514" target="_blank" class="flex items-center gap-2 text-slate-600 hover:text-[#1877F2] transition-colors group">
+                                <i data-lucide="facebook" class="w-5 h-5 group-hover:fill-[#1877F2]/10"></i>
+                                <span class="text-sm font-bold">Facebook</span>
                             </a>
-                            <a href="https://www.linkedin.com/groups/9075090/" target="_blank" class="flex items-center gap-2 text-slate-600 hover:text-blue-700 transition-colors">
-                                <i data-lucide="linkedin" class="w-4 h-4"></i>
-                                <span class="text-sm font-medium">LinkedIn</span>
+                            <a href="https://www.linkedin.com/groups/9075090/" target="_blank" class="flex items-center gap-2 text-slate-600 hover:text-[#0A66C2] transition-colors group">
+                                <i data-lucide="linkedin" class="w-5 h-5 group-hover:fill-[#0A66C2]/10"></i>
+                                <span class="text-sm font-bold">LinkedIn</span>
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <p class="mt-6 text-sm text-slate-500">
+                <p class="mt-auto pt-6 text-sm text-slate-500 italic border-t border-slate-50">
                     Join our groups or email the address above to stay updated on upcoming events.
                 </p>
             </section>
@@ -142,13 +159,13 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-8">
+    <footer class="bg-white border-t border-slate-200 py-10 mt-auto">
         <div class="max-w-[1440px] mx-auto px-4 text-center">
-            <p class="text-slate-500 text-sm">
+            <p class="text-slate-500 text-sm font-semibold">
                 &copy; <span id="year"></span> Paul Bartlett. All rights reserved.
             </p>
-            <p class="text-xs text-slate-400 mt-2">
-                Official alumni group of the University of Cambridge.
+            <p class="text-xs text-slate-400 mt-2 uppercase tracking-widest font-bold">
+                Official alumni group of the University of Cambridge
             </p>
         </div>
     </footer>

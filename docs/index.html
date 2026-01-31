@@ -1,8 +1,155 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head><title>Berks &amp; Oxon Cambridge Society</title></head>
-  <body>
-    <h1>Under construction</h1>
-    <p>Please try again later.</p>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berkshire and Oxfordshire Cambridge Society</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            /* Traditional Cambridge Blue: #A3C1AD */
+            --cambridge-blue: #A3C1AD;
+            --cambridge-dark: #003B5C; /* University Navy */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .cambridge-bg { background-color: var(--cambridge-blue); }
+        .cambridge-text { color: var(--cambridge-dark); }
+        .cambridge-border { border-color: var(--cambridge-blue); }
+        
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b-4 cambridge-border shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
+            <div class="flex-shrink-0">
+                <!-- University Logo Placeholder (SVG) -->
+                <svg width="220" height="60" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="University of Cambridge">
+                    <rect width="220" height="60" rx="4" fill="white"/>
+                    <path d="M20 15H35V45H20V15Z" fill="#003B5C"/>
+                    <text x="50" y="32" font-family="serif" font-weight="bold" font-size="20" fill="#003B5C">UNIVERSITY OF</text>
+                    <text x="50" y="52" font-family="serif" font-weight="bold" font-size="24" fill="#003B5C">CAMBRIDGE</text>
+                </svg>
+            </div>
+            <div class="h-12 w-px bg-slate-200 hidden md:block"></div>
+            <h1 class="text-2xl md:text-3xl font-semibold cambridge-text text-center md:text-left">
+                Berkshire and Oxfordshire Cambridge Society
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Card 1: About the Society -->
+            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover">
+                <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
+                    <i data-lucide="users" class="text-white"></i>
+                </div>
+                <h2 class="text-xl font-bold mb-4 cambridge-text">About the Society</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    The Berks and Oxon Cambridge Society is long-established, and offers an active programme of excursions, visits, walks etc.
+                </p>
+                <p class="text-slate-600 leading-relaxed">
+                    Although the events are varied, there are certain ones that are more or less fixtures in our calendar:
+                    <ul><li>
+                      an annual get together in the autumn, which is typically a lunch at the Henley Business School at Greenlands with an external speaker
+                    </li><li>
+                      a brief AGM with a pot luck lunch, which is then followed by a talk or presentation
+                    </li><li>
+                      a Freshers' event at a bar in Reading
+                    </li><li>
+                      a weekend away in or around May
+                    </li></ul>
+                </p>
+                <p class="mt-4 text-slate-600 leading-relaxed">
+                  Events and outings take place both at weekends and on weekdays, and partners and guests are always welcome.
+                </p>
+            </section>
+
+            <!-- Card 2: Events -->
+            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover">
+                <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
+                    <i data-lucide="calendar" class="text-white"></i>
+                </div>
+                <h2 class="text-xl font-bold mb-4 cambridge-text">Events</h2>
+                <div class="space-y-4">
+                    <div class="border-l-4 cambridge-border pl-4">
+                        <h3 class="font-semibold text-sm text-slate-500 uppercase">Upcoming</h3>
+                        <p class="font-medium">AGM</p>
+                        <p class="text-xs text-slate-400">14 Feb 2026 &middot; Nettlebed Village Hall</p>
+                    </div>
+                    <div class="border-l-4 cambridge-border pl-4">
+                        <h3 class="font-semibold text-sm text-slate-500 uppercase">Recent</h3>
+                        <p class="font-medium">Annual Greenlands lunch</p>
+                        <p class="text-xs text-slate-400">7 Nov 2025 &middot; Henley Business School</p>
+                    </div>
+                    <p class="text-sm italic text-slate-500 pt-2">
+                        Additional past events will be added as time permits, but please <a href="mailto:secretary@camsoc-berksoxon.org.uk">email</a>
+                        if you have any questions.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Card 3: How to Join -->
+            <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover">
+                <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
+                    <i data-lucide="mail" class="text-white"></i>
+                </div>
+                <h2 class="text-xl font-bold mb-4 cambridge-text">How to Join</h2>
+                <p class="text-slate-600 mb-6">
+                    Membership is open to all alumni of the University of Cambridge residing in Berkshire or Oxfordshire.
+                </p>
+                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <p class="text-sm font-semibold text-slate-700 mb-2">Get in touch: email</p>
+                    <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-blue-700 hover:underline break-all block font-medium">
+                        secretary@camsoc-berksoxon.org.uk
+                    </a>
+                </div>
+                <p class="mt-6 text-sm text-slate-500">
+                    Join our mailing list to stay updated on upcoming events of interest to regional alumni.
+                </p>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm">
+                &copy; <span id="year"></span> Paul Bartlett. All rights reserved.
+            </p>
+            <p class="text-xs text-slate-400 mt-2">
+                Official alumni group of the University of Cambridge.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Set current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
 </html>

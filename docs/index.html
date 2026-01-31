@@ -10,9 +10,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
         :root {
-            /* Traditional Cambridge Blue: #A3C1AD */
             --cambridge-blue: #A3C1AD;
-            --cambridge-dark: #003B5C; /* University Navy */
+            --cambridge-dark: #003B5C;
         }
 
         body {
@@ -40,7 +39,6 @@
     <header class="bg-white border-b-4 cambridge-border shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
             <div class="flex-shrink-0">
-                <!-- University Logo Placeholder (SVG) -->
                 <svg width="220" height="60" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="University of Cambridge">
                     <rect width="220" height="60" rx="4" fill="white"/>
                     <path d="M20 15H35V45H20V15Z" fill="#003B5C"/>
@@ -65,23 +63,18 @@
                     <i data-lucide="users" class="text-white"></i>
                 </div>
                 <h2 class="text-xl font-bold mb-4 cambridge-text">About the Society</h2>
-                <p class="text-slate-600 leading-relaxed">
+                <p class="text-slate-600 leading-relaxed mb-4">
                     The Berks and Oxon Cambridge Society is long-established, and offers an active programme of excursions, visits, walks etc.
                 </p>
+                <p class="text-slate-600 leading-relaxed mb-2 font-medium">Fixtures in our calendar include:</p>
+                <ul class="text-slate-600 space-y-2 list-disc pl-5 mb-4">
+                    <li>Annual autumn lunch at Henley Business School (Greenlands) with an external speaker</li>
+                    <li>Brief AGM with a pot luck lunch and presentation</li>
+                    <li>Freshers' event at a bar in Reading</li>
+                    <li>A weekend away in or around May</li>
+                </ul>
                 <p class="text-slate-600 leading-relaxed">
-                    Although the events are varied, there are certain ones that are more or less fixtures in our calendar:
-                    <ul><li>
-                      an annual get together in the autumn, which is typically a lunch at the Henley Business School at Greenlands with an external speaker
-                    </li><li>
-                      a brief AGM with a pot luck lunch, which is then followed by a talk or presentation
-                    </li><li>
-                      a Freshers' event at a bar in Reading
-                    </li><li>
-                      a weekend away in or around May
-                    </li></ul>
-                </p>
-                    <p class="text-sm italic text-slate-500 pt-2">
-                  Events and outings take place both at weekends and on weekdays, and partners and guests are always welcome.
+                    Partners and guests are always welcome at our varied events.
                 </p>
             </section>
 
@@ -95,16 +88,15 @@
                     <div class="border-l-4 cambridge-border pl-4">
                         <h3 class="font-semibold text-sm text-slate-500 uppercase">Upcoming</h3>
                         <p class="font-medium">AGM</p>
-                        <p class="text-xs text-slate-400">14 Feb 2026 &middot; Nettlebed Village Hall</p>
+                        <p class="text-xs text-slate-400">14 Feb 2026 • Nettlebed Village Hall</p>
                     </div>
-                    <div class="border-l-4 cambridge-border pl-4">
-                        <h3 class="font-semibold text-sm text-slate-500 uppercase">Recent</h3>
-                        <p class="font-medium">Annual Greenlands lunch</p>
-                        <p class="text-xs text-slate-400">7 Nov 2025 &middot; Henley Business School</p>
+                    <div class="border-l-4 border-slate-200 pl-4">
+                        <h3 class="font-semibold text-sm text-slate-400 uppercase">Recent</h3>
+                        <p class="font-medium text-slate-500">Annual Greenlands lunch</p>
+                        <p class="text-xs text-slate-400">7 Nov 2025 • Henley Business School</p>
                     </div>
-                    <p class="text-sm italic text-slate-500 pt-2">
-                        Additional past events will be added as time permits, but please <a href="mailto:secretary@camsoc-berksoxon.org.uk">email</a>
-                        if you have any questions.
+                    <p class="text-sm text-slate-500 pt-2">
+                        Additional past events will be added as time permits. Please <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-blue-600 hover:underline">email us</a> if you have any questions.
                     </p>
                 </div>
             </section>
@@ -120,12 +112,13 @@
                 </p>
                 <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
                     <p class="text-sm font-semibold text-slate-700 mb-2">Get in touch:</p>
-                    <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-blue-700 hover:underline break-all block font-medium">
+                    <!-- Added text-sm to make the email slightly smaller -->
+                    <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-sm text-blue-700 hover:underline break-all block font-medium">
                         secretary@camsoc-berksoxon.org.uk
                     </a>
                 </div>
                 <p class="mt-6 text-sm text-slate-500">
-                    Email the above address with your details to join our mailing list to stay updated on upcoming events of interest to regional alumni.
+                    Email the address above with your details to join our mailing list and stay updated on upcoming events.
                 </p>
             </section>
 
@@ -145,10 +138,7 @@
     </footer>
 
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
-
-        // Set current year
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>

@@ -1,0 +1,21 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-white border-t border-slate-200 py-10 mt-auto">
+  <div class="max-w-[1440px] mx-auto px-4 text-center">
+    <p class="text-slate-500 text-sm font-semibold">
+      &copy; <span id="year">{currentYear}</span> Paul Bartlett. All rights reserved.
+    </p>
+    <p class="text-xs text-slate-400 mt-2 uppercase tracking-widest font-bold">
+      Official alumni group of the University of Cambridge
+    </p>
+  </div>
+</footer>
+
+<script>
+  const yearEl = document.getElementById('year');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear().toString();
+  }
+</script>

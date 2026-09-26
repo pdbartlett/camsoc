@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  /* Official University of Cambridge Brand Colors */
+  --cambridge-blue: #A3C1AD;
+  --cambridge-dark: #003B5C; /* University Navy */
+
+  /* Typography Variables */
+  --font-heading: 'Feijoa', 'Charter', 'Bitstream Charter', 'Sitka Text', 'Cambria', 'Georgia', serif;
+  --font-body: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #f8fafc;
+  color: #1e293b;
+  line-height: 1.6;
+}
+
+/* Heading Styles */
+h1, h2, h3, h4, .font-serif-brand {
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
+.cambridge-bg {
+  background-color: var(--cambridge-blue);
+}
+
+.cambridge-text {
+  color: var(--cambridge-dark);
+}
+
+.cambridge-border {
+  border-color: var(--cambridge-blue);
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}

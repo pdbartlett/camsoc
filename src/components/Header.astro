@@ -1,0 +1,36 @@
+---
+import ucLogo from '../assets/uclogo.png';
+---
+
+<header class="bg-white border-b-4 cambridge-border shadow-sm">
+  <div class="max-w-[1440px] mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
+    <div class="flex-shrink-0">
+      <div class="w-[220px] h-[60px] flex items-center justify-center">
+        <img
+          src={ucLogo.src}
+          alt="University of Cambridge"
+          class="max-h-full object-contain"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        />
+        <svg
+          style="display:none"
+          width="220"
+          height="60"
+          viewBox="0 0 220 60"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-label="University of Cambridge Fallback"
+        >
+          <rect width="220" height="60" rx="4" fill="white" />
+          <path d="M20 15H35V45H20V15Z" fill="#003B5C" />
+          <text x="50" y="32" font-family="serif" font-weight="bold" font-size="20" fill="#003B5C">UNIVERSITY OF</text>
+          <text x="50" y="52" font-family="serif" font-weight="bold" font-size="24" fill="#003B5C">CAMBRIDGE</text>
+        </svg>
+      </div>
+    </div>
+    <div class="h-12 w-px bg-slate-200 hidden md:block"></div>
+    <h1 class="text-2xl md:text-4xl font-bold cambridge-text text-center md:text-left leading-tight">
+      Berkshire and Oxfordshire Cambridge Society
+    </h1>
+  </div>
+</header>

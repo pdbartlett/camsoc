@@ -32,6 +32,29 @@ Built with **[Astro](https://astro.build/)**, **[Bun](https://bun.sh/)**, and **
    bun preview
    ```
 
+## Content Management
+
+Posts are stored as Markdown (`.md`) files in `src/content/posts/`.
+
+Each file contains YAML frontmatter:
+
+```markdown
+---
+title: "Event or News Title"
+date: 2026-02-14
+tags:
+  - events # Use 'events' to display on the Events card, or 'news' for the News card
+location: "Henley Business School" # Optional, particularly for events
+description: "Brief summary shown on listings" # Optional
+---
+
+Markdown body content goes here...
+```
+
+- **News card**: Displays up to 5 latest posts tagged `news`. Full archive is at `/news`.
+- **Events card**: Displays up to 5 latest posts tagged `events`. Full archive is at `/events`.
+- **RSS Feed**: Full-text feed available at `/rss.xml` (with `<link rel="alternate">` autodiscovery).
+
 ## Deployment
 
 The website is configured for continuous static site deployment to **GitHub Pages** using GitHub Actions (`.github/workflows/deploy.yml`).
@@ -41,3 +64,4 @@ Every push to the `main` branch automatically:
 2. Installs dependencies using `bun install --frozen-lockfile`
 3. Builds the static site with `bun run build`
 4. Deploys the `./dist` artifact to GitHub Pages
+

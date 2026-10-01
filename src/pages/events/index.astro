@@ -1,0 +1,184 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { Calendar, MapPin, ArrowLeft, ArrowRight, Mail } from 'lucide-astro';
+import { formatDate } from '../../utils/date';
+
+const allPosts = await getCollection('posts');
+const now = new Date();
+const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+const allEventPosts = allPosts.filter((post) =>
+  post.data.tags.map((t: string) => t.toLowerCase()).includes('events')
+);
+
+// Upcoming: today or future, sorted soonest first
+const upcomingEvents = allEventPosts
+  .filter((post) => post.data.date.getTime() >= startOfToday)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+// Past: before today, sorted most recent first
+const pastEvents = allEventPosts
+  .filter((post) => post.data.date.getTime() < startOfToday)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<Layout
+  title="Events Archive | Berkshire and Oxfordshire Cambridge Society"
+  description="Upcoming and past events organised by the Berkshire and Oxfordshire Cambridge Society."
+>
+  <Header />
+
+  <main class="flex-grow max-w-[1000px] mx-auto px-4 py-10 w-full">
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <a href={baseUrl} class="inline-flex items-center gap-1.5 font-semibold text-sm text-blue-700 hover:text-blue-900 transition-colors">
+        <ArrowLeft class="w-4 h-4" />
+        <span>Back to Home</span>
+      </a>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="flex items-center gap-4 mb-10">
+      <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center flex-shrink-0">
+        <Calendar class="w-6 h-6 text-white" />
+      </div>
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold cambridge-text">Events Archive</h1>
+        <p class="text-slate-500 text-sm mt-1">Programme of excursions, visits, dinners, and gatherings</p>
+      </div>
+    </div>
+
+    <!-- Subheading 1: Upcoming Events -->
+    <section class="mb-14">
+      <h2 class="text-xl font-bold cambridge-text uppercase tracking-wider mb-5 pb-2 border-b-2 cambridge-border flex items-center justify-between">
+        <span>Upcoming Events</span>
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full cambridge-bg text-slate-800 normal-case tracking-normal">
+          {upcomingEvents.length} {upcomingEvents.length === 1 ? 'event' : 'events'}
+        </span>
+      </h2>
+
+      {upcomingEvents.length > 0 ? (
+        <div class="space-y-6">
+          {upcomingEvents.map((post) => (
+            <article class="bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-100 border-l-4 cambridge-border p-6 md:p-8 transition-shadow">
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 mb-2">
+                <div class="flex items-center gap-1.5 font-semibold text-slate-700">
+                  <Calendar class="w-3.5 h-3.5 text-blue-600" />
+                  <time datetime={post.data.date.toISOString()}>
+                    {formatDate(post.data.date)}
+                  </time>
+                </div>
+                {post.data.location && (
+                  <div class="flex items-center gap-1.5 text-slate-500">
+                    <MapPin class="w-3.5 h-3.5" />
+                    <span>{post.data.location}</span>
+                  </div>
+                )}
+              </div>
+              <h3 class="text-xl md:text-2xl font-bold cambridge-text mb-2">
+                <a href={`${baseUrl}posts/${post.id}`} class="hover:underline">
+                  {post.data.title}
+                </a>
+              </h3>
+              {post.data.description && (
+                <p class="text-slate-600 text-sm mb-4 leading-relaxed">
+                  {post.data.description}
+                </p>
+              )}
+              <a
+                href={`${baseUrl}posts/${post.id}`}
+                class="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-900 group"
+              >
+                <span>View event details</span>
+                <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 text-center">
+          <p class="text-slate-600 font-medium">None at present</p>
+          <p class="text-slate-400 text-sm mt-1">New events will be announced as they are scheduled.</p>
+        </div>
+      )}
+    </section>
+
+    <!-- Subheading 2: Past Events (Subdued font colour and styling) -->
+    <section class="mb-14">
+      <h2 class="text-xl font-bold text-slate-400 uppercase tracking-wider mb-5 pb-2 border-b-2 border-slate-200 flex items-center justify-between">
+        <span>Past Events</span>
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 normal-case tracking-normal">
+          {pastEvents.length} {pastEvents.length === 1 ? 'event' : 'events'}
+        </span>
+      </h2>
+
+      {pastEvents.length > 0 ? (
+        <div class="space-y-4">
+          {pastEvents.map((post) => (
+            <article class="bg-slate-50/70 hover:bg-slate-50 rounded-xl border border-slate-200/70 p-6 transition-colors">
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400 mb-1.5">
+                <div class="flex items-center gap-1.5">
+                  <Calendar class="w-3.5 h-3.5 text-slate-400" />
+                  <time datetime={post.data.date.toISOString()}>
+                    {formatDate(post.data.date)}
+                  </time>
+                </div>
+                {post.data.location && (
+                  <div class="flex items-center gap-1.5">
+                    <MapPin class="w-3.5 h-3.5 text-slate-400" />
+                    <span>{post.data.location}</span>
+                  </div>
+                )}
+              </div>
+              <!-- Subdued font colour for past event title -->
+              <h3 class="text-lg md:text-xl font-semibold text-slate-500 hover:text-slate-800 transition-colors mb-2">
+                <a href={`${baseUrl}posts/${post.id}`}>
+                  {post.data.title}
+                </a>
+              </h3>
+              {post.data.description && (
+                <p class="text-slate-400 text-sm mb-3 leading-relaxed">
+                  {post.data.description}
+                </p>
+              )}
+              <a
+                href={`${baseUrl}posts/${post.id}`}
+                class="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-700 group transition-colors"
+              >
+                <span>View past event details</span>
+                <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="bg-slate-50 rounded-xl border border-slate-200 p-8 text-center">
+          <p class="text-slate-400 text-sm">No past events recorded yet.</p>
+        </div>
+      )}
+    </section>
+
+    <!-- Page Footer Note -->
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 text-sm text-slate-600 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <p>
+        Additional past events will be added as time permits. Partners and guests are always welcome at our varied events.
+      </p>
+      <a
+        href="mailto:secretary@camsoc-berksoxon.org.uk"
+        class="inline-flex items-center gap-2 font-semibold text-blue-700 hover:text-blue-900 flex-shrink-0"
+      >
+        <Mail class="w-4 h-4" />
+        <span>Contact Secretary</span>
+      </a>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

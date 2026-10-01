@@ -1,0 +1,179 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { Calendar, MapPin, Tag, ArrowLeft, Mail } from 'lucide-astro';
+import { formatDate } from '../../utils/date';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+
+const isEvent = post.data.tags.map((t: string) => t.toLowerCase()).includes('events');
+const isNews = post.data.tags.map((t: string) => t.toLowerCase()).includes('news');
+const backUrl = isEvent ? `${baseUrl}events` : isNews ? `${baseUrl}news` : baseUrl;
+const backLabel = isEvent ? 'Back to all events' : isNews ? 'Back to all news' : 'Back to home';
+const hasContent = post.body && post.body.trim().length > 0;
+---
+
+<Layout
+  title={`${post.data.title} | Berkshire and Oxfordshire Cambridge Society`}
+  description={post.data.description || `${post.data.title} - Berkshire and Oxfordshire Cambridge Society`}
+>
+  <Header />
+
+  <main class="flex-grow max-w-[960px] mx-auto px-4 py-10 w-full">
+    <!-- Breadcrumb / Back Link -->
+    <nav class="mb-8 flex items-center gap-2 text-sm text-slate-500">
+      <a href={backUrl} class="inline-flex items-center gap-1.5 font-semibold text-blue-700 hover:text-blue-900 transition-colors">
+        <ArrowLeft class="w-4 h-4" />
+        <span>{backLabel}</span>
+      </a>
+      <span class="text-slate-300">/</span>
+      <span class="text-slate-400 truncate max-w-[300px]">{post.data.title}</span>
+    </nav>
+
+    <!-- Post Article Card -->
+    <article class="bg-white rounded-xl shadow-md border border-slate-100 p-8 md:p-12">
+      <!-- Tags Badges -->
+      {post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-4">
+          {post.data.tags.map((tag: string) => {
+            const lower = tag.toLowerCase();
+            const tagUrl = lower === 'events' ? `${baseUrl}events` : lower === 'news' ? `${baseUrl}news` : null;
+            return tagUrl ? (
+              <a
+                href={tagUrl}
+                class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider cambridge-bg text-slate-800 hover:opacity-90 transition-opacity"
+              >
+                <Tag class="w-3 h-3" />
+                <span>{tag}</span>
+              </a>
+            ) : (
+              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-slate-100 text-slate-600">
+                <Tag class="w-3 h-3" />
+                <span>{tag}</span>
+              </span>
+            );
+          })}
+        </div>
+      )}
+
+      <!-- Post Title -->
+      <h1 class="text-3xl md:text-5xl font-bold cambridge-text leading-tight mb-4">
+        {post.data.title}
+      </h1>
+
+      <!-- Metadata (Date & Location) -->
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2 py-4 border-y border-slate-100 text-slate-500 text-sm mb-8">
+        <div class="flex items-center gap-2">
+          <Calendar class="w-4 h-4 text-slate-400" />
+          <time datetime={post.data.date.toISOString()}>
+            {formatDate(post.data.date)}
+          </time>
+        </div>
+        {post.data.location && (
+          <div class="flex items-center gap-2">
+            <MapPin class="w-4 h-4 text-slate-400" />
+            <span>{post.data.location}</span>
+          </div>
+        )}
+      </div>
+
+      <!-- Post Body / Content -->
+      {hasContent ? (
+        <div class="post-content text-slate-700 leading-relaxed text-base space-y-4">
+          <Content />
+        </div>
+      ) : (
+        <div class="bg-slate-50 rounded-lg p-8 border border-slate-200 text-center my-6">
+          <p class="text-slate-600 font-medium mb-2">
+            Further details for this {isEvent ? 'event' : 'post'} will be announced soon.
+          </p>
+          <p class="text-slate-400 text-sm">
+            Please check back regularly or contact the Secretary for inquiries.
+          </p>
+        </div>
+      )}
+
+      <!-- Post Footer Contact -->
+      <div class="mt-12 pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <a href={backUrl} class="inline-flex items-center gap-2 font-semibold text-sm text-blue-700 hover:text-blue-900 transition-colors">
+          <ArrowLeft class="w-4 h-4" />
+          <span>{backLabel}</span>
+        </a>
+
+        <a
+          href="mailto:secretary@camsoc-berksoxon.org.uk"
+          class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-blue-700 transition-colors"
+        >
+          <Mail class="w-4 h-4" />
+          <span>Questions? Email the Secretary</span>
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .post-content :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--cambridge-dark);
+  }
+  .post-content :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--cambridge-dark);
+  }
+  .post-content :global(p) {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+  .post-content :global(ul) {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .post-content :global(ol) {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .post-content :global(li) {
+    margin-bottom: 0.35rem;
+  }
+  .post-content :global(a) {
+    color: #1d4ed8;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  .post-content :global(a:hover) {
+    color: #1e40af;
+  }
+  .post-content :global(blockquote) {
+    border-left: 4px solid var(--cambridge-blue);
+    padding-left: 1rem;
+    font-style: italic;
+    color: #475569;
+    margin: 1.5rem 0;
+  }
+</style>

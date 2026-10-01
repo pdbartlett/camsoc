@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 interface Props {
   title?: string;
@@ -7,14 +8,15 @@ interface Props {
 }
 
 const {
-  title = "Berkshire and Oxfordshire Cambridge Society",
-  description = "Official alumni group of the University of Cambridge for Berkshire and Oxfordshire."
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION
 } = Astro.props;
 
 const baseUrl = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
 const faviconUrl = `${baseUrl}favicon.svg`;
+const rssUrl = `${baseUrl}rss.xml`;
 ---
 
 <!DOCTYPE html>
@@ -23,6 +25,7 @@ const faviconUrl = `${baseUrl}favicon.svg`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href={faviconUrl} />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={rssUrl} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

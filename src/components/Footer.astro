@@ -1,5 +1,8 @@
 ---
 const currentYear = new Date().getFullYear();
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
 ---
 
 <footer class="bg-white border-t border-slate-200 py-10 mt-auto">
@@ -12,10 +15,3 @@ const currentYear = new Date().getFullYear();
     </p>
   </div>
 </footer>
-
-<script>
-  const yearEl = document.getElementById('year');
-  if (yearEl) {
-    yearEl.textContent = new Date().getFullYear().toString();
-  }
-</script>

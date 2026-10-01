@@ -1,27 +1,50 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { Users, Calendar, Mail, Facebook, Linkedin } from 'lucide-astro';
+import { Newspaper, Calendar, Users, Facebook, Linkedin, ArrowRight } from 'lucide-astro';
+import { formatDate } from '../utils/date';
+import { Rss } from 'lucide-astro';
 
-interface RecentEvent {
-  title: string;
-  date: string;
-  location: string;
-}
+const allPosts = await getCollection('posts');
 
-const recentEvents: RecentEvent[] = [
-  {
-    title: "AGM",
-    date: "14 Feb 2026",
-    location: "Nettlebed Village Hall",
-  },
-  {
-    title: "Annual Greenlands lunch",
-    date: "7 Nov 2025",
-    location: "Henley Business School",
-  },
-];
+const now = new Date();
+const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+// News posts: newest first, max 5
+const newsPosts = allPosts
+  .filter((post) => post.data.tags.map((t: string) => t.toLowerCase()).includes('news'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 5);
+
+// Events: separate upcoming and past
+const allEventPosts = allPosts.filter((post) =>
+  post.data.tags.map((t: string) => t.toLowerCase()).includes('events')
+);
+
+// Upcoming: today or later, sorted soonest first (ascending)
+const upcomingEvents = allEventPosts
+  .filter((post) => post.data.date.getTime() >= startOfToday)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+// Past: before today, sorted most recent first (descending)
+const pastEvents = allEventPosts
+  .filter((post) => post.data.date.getTime() < startOfToday)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Display up to 5 upcoming events (or the first 5 if > 5)
+const displayedUpcoming = upcomingEvents.slice(0, 5);
+
+// If less than 5 upcoming (n < 5), display 5 - n past ones
+const remainingSlots = 5 - displayedUpcoming.length;
+const displayedPast = remainingSlots > 0 ? pastEvents.slice(0, remainingSlots) : [];
+
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+
+const rssUrl = `${baseUrl}rss.xml`;
 ---
 
 <Layout title="Berkshire and Oxfordshire Cambridge Society">
@@ -29,78 +52,158 @@ const recentEvents: RecentEvent[] = [
 
   <!-- Main Content -->
   <main class="flex-grow max-w-[1440px] mx-auto px-4 py-12 w-full">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
       
-      <!-- Card 1: About the Society -->
-      <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col">
+      <!-- Card 1: News -->
+      <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col h-full">
         <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
-          <Users class="w-6 h-6 text-white" />
+          <Newspaper class="w-6 h-6 text-white" />
         </div>
-        <h2 class="text-2xl font-bold mb-4 cambridge-text">About the Society</h2>
-        <p class="text-slate-600 mb-4">
-          The Berks and Oxon Cambridge Society is long-established, and offers an active programme of excursions, visits, walks etc.
-        </p>
-        <p class="text-slate-600 mb-2 font-bold uppercase text-xs tracking-widest opacity-70">
-          Fixtures in our calendar include:
-        </p>
-        <ul class="text-slate-600 space-y-2 list-disc pl-5 mb-8 text-sm">
-          <li>Annual autumn lunch at Henley Business School (Greenlands) with an external speaker</li>
-          <li>Brief AGM with a pot luck lunch and presentation</li>
-          <li>Freshers' event at a bar in Reading</li>
-          <li>A weekend away in or around May</li>
-        </ul>
-        <p class="mt-auto pt-6 text-sm text-slate-500 italic border-t border-slate-50">
-          Partners and guests are always welcome at our varied events.
-        </p>
+        <h2 class="text-2xl font-bold mb-4 cambridge-text">News</h2>
+        
+        {newsPosts.length > 0 ? (
+          <div class="space-y-4 mb-8">
+            {newsPosts.map((post) => (
+              <article class="border-l-4 border-slate-200 hover:border-[#A3C1AD] pl-4 transition-colors">
+                <a href={`${baseUrl}posts/${post.id}`} class="group block">
+                  <h3 class="font-bold text-lg text-slate-700 group-hover:text-[#003B5C] leading-snug transition-colors">
+                    {post.data.title}
+                  </h3>
+                  <p class="text-sm text-slate-400 mt-0.5">
+                    {formatDate(post.data.date)}
+                  </p>
+                  {post.data.description && (
+                    <p class="text-sm text-slate-500 mt-1 line-clamp-2">
+                      {post.data.description}
+                    </p>
+                  )}
+                </a>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="border-l-4 cambridge-border pl-4 mb-8">
+            <p class="font-bold text-lg text-slate-500 leading-tight"><i>None at present</i></p>
+          </div>
+        )}
+
+        <div class="mt-auto pt-6 border-t border-slate-50">
+          <a
+            href={`${baseUrl}news`}
+            class="inline-flex items-center gap-1.5 text-sm font-bold text-blue-700 hover:text-blue-900 group"
+          >
+            <span>View all news</span>
+            <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </a>
+        </div>
       </section>
 
-      <!-- Card 2: Events -->
-      <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col">
+      <!-- Card 2: Events (Upcoming prioritized, filled with Recent up to 5) -->
+      <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col h-full">
         <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
           <Calendar class="w-6 h-6 text-white" />
         </div>
         <h2 class="text-2xl font-bold mb-4 cambridge-text">Events</h2>
-        <div class="space-y-6 mb-8">
-          <div class="border-l-4 cambridge-border pl-4">
-            <h3 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-1">Upcoming</h3>
-            <p class="font-bold text-lg leading-tight"><i>None at present</i></p>
-          </div>
-          <div class="border-l-4 border-slate-200 pl-4">
-            <h3 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-1">Recent</h3>
-            {recentEvents.map((event) => (
-              <div class="mt-2 first:mt-0">
-                <p class="font-bold text-lg text-slate-600 leading-tight">{event.title}</p>
-                <p class="text-sm text-slate-400">{event.date} • {event.location}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <p class="mt-auto pt-6 text-sm text-slate-500 italic border-t border-slate-50">
-          Additional past events will be added as time permits. Please <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-blue-600 hover:underline font-semibold not-italic">email us</a> if you have any questions.
-        </p>
-      </section>
-
-      <!-- Card 3: How to Join -->
-      <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col">
-        <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
-          <Mail class="w-6 h-6 text-white" />
-        </div>
-        <h2 class="text-2xl font-bold mb-4 cambridge-text">How to Join</h2>
-        <p class="text-slate-600 mb-6">
-          Membership is open to all alumni of the University of Cambridge residing in Berkshire or Oxfordshire.
-        </p>
         
-        <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 space-y-6 mb-8">
+        <div class="space-y-6 mb-8">
+          <!-- Upcoming Section -->
+          <div class="border-l-4 cambridge-border pl-4">
+            <h3 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-1.5">Upcoming</h3>
+            {displayedUpcoming.length > 0 ? (
+              <div class="space-y-3">
+                {displayedUpcoming.map((post) => (
+                  <article>
+                    <a href={`${baseUrl}posts/${post.id}`} class="group block">
+                      <p class="font-bold text-lg text-slate-700 group-hover:text-[#003B5C] leading-snug transition-colors">
+                        {post.data.title}
+                      </p>
+                      <p class="text-sm text-slate-400">
+                        {formatDate(post.data.date)}
+                        {post.data.location ? ` • ${post.data.location}` : ''}
+                      </p>
+                    </a>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p class="font-bold text-lg text-slate-600 leading-tight"><i>None at present</i></p>
+            )}
+          </div>
+
+          <!-- Recent Section -->
+          {displayedPast.length > 0 && (
+            <div class="border-l-4 border-slate-200 pl-4">
+              <h3 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-1.5">Recent</h3>
+              <div class="space-y-3">
+                {displayedPast.map((post) => (
+                  <article>
+                    <a href={`${baseUrl}posts/${post.id}`} class="group block">
+                      <p class="font-bold text-lg text-slate-600 group-hover:text-[#003B5C] leading-snug transition-colors">
+                        {post.data.title}
+                      </p>
+                      <p class="text-sm text-slate-400">
+                        {formatDate(post.data.date)}
+                        {post.data.location ? ` • ${post.data.location}` : ''}
+                      </p>
+                    </a>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div class="mt-auto pt-6 border-t border-slate-50 space-y-3">
           <div>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Get in touch</p>
-            <a href="mailto:secretary@camsoc-berksoxon.org.uk" class="text-sm text-blue-800 hover:underline break-all block font-bold">
-              secretary@camsoc-berksoxon.org.uk
+            <a
+              href={`${baseUrl}events`}
+              class="inline-flex items-center gap-1.5 text-sm font-bold text-blue-700 hover:text-blue-900 group"
+            >
+              <span>View all events</span>
+              <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
-          
-          <div class="pt-5 border-t border-slate-200">
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Find us online</p>
-            <div class="flex flex-wrap gap-x-6 gap-y-4">
+        </div>
+      </section>
+
+      <!-- Card 3: About the Society (Merged About + How to Join) -->
+      <section class="bg-white rounded-xl shadow-md p-8 border border-slate-100 card-hover flex flex-col h-full">
+        <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center mb-6">
+          <Users class="w-6 h-6 text-white" />
+        </div>
+        <h2 class="text-2xl font-bold mb-4 cambridge-text">About the Society</h2>
+        
+        <div class="space-y-4 text-slate-600 mb-6">
+          <p>
+            The Berks and Oxon Cambridge Society is long-established, and offers an active programme of excursions, visits, walks etc.
+          </p>
+          <div>
+            <p class="font-bold uppercase text-xs tracking-widest opacity-70 mb-2">
+              Fixtures in our calendar include:
+            </p>
+            <ul class="space-y-1.5 list-disc pl-5 text-sm">
+              <li>Annual autumn lunch at Henley Business School (Greenlands) with an external speaker</li>
+              <li>Brief AGM with a pot luck lunch and presentation</li>
+              <li>A weekend away in or around May</li>
+            </ul>
+          </div>
+          <h3 class="text-xl font-bold mb-3 cambridge-text">Join us</h3>
+          <p>
+            Membership is open to all alumni of the University of Cambridge residing in Berkshire or Oxfordshire.
+          </p>
+          <p>
+            Sign up to our mailing list here:
+          </p>
+          <button class="bg-[#A3C1AD] text-white font-bold py-2 px-4 rounded hover:bg-[#8bb29a] transition-colors">
+            <a href="mailto:secretary@camsoc-berksoxon.org.uk?subject=Membership%20request%3A&body=Contact%20email%3A%0ADegree%20subject%3A%0ACollege%20attended%3A%0AMatriculation%20year%3A">
+              Join
+            </a>
+          </button>
+          <p>
+            Or follow us on social media using the links below:
+          </p>
+          <div class="bg-slate-50 p-5 rounded-lg border border-slate-200 space-y-4">
+            <div class="flex flex-wrap gap-x-6 gap-y-3">
               <a href="https://www.facebook.com/groups/berksoxon/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-slate-600 hover:text-[#1877F2] transition-colors group">
                 <Facebook class="w-5 h-5 group-hover:fill-[#1877F2]/10" />
                 <span class="text-sm font-bold">Facebook</span>
@@ -109,13 +212,18 @@ const recentEvents: RecentEvent[] = [
                 <Linkedin class="w-5 h-5 group-hover:fill-[#0A66C2]/10" />
                 <span class="text-sm font-bold">LinkedIn</span>
               </a>
+              <a
+                href={rssUrl} target="_blank" rel="noopener noreferrer"
+                class="flex items-center gap-2 text-slate-600 hover:text-[#0A66C2] transition-colors group"
+                aria-label="RSS Feed"
+              >
+                <Rss class="w-5 h-5 group-hover:fill-[#0A66C2]/10" />
+                <span class="text-sm font-bold">RSS</span>
+              </a>
+
             </div>
           </div>
         </div>
-        
-        <p class="mt-auto pt-6 text-sm text-slate-500 italic border-t border-slate-50">
-          Join our groups or email the address above to stay updated on upcoming events.
-        </p>
       </section>
 
     </div>

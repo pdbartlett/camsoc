@@ -1,10 +1,14 @@
 ---
 import ucLogo from '../assets/uclogo.png';
+
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
 ---
 
 <header class="bg-white border-b-4 cambridge-border shadow-sm">
   <div class="max-w-[1440px] mx-auto px-4 py-6 flex flex-col md:flex-row items-center gap-6">
-    <div class="flex-shrink-0">
+    <a href={baseUrl} class="flex-shrink-0 group" aria-label="Home">
       <div class="w-[220px] h-[60px] flex items-center justify-center">
         <img
           src={ucLogo.src}
@@ -27,10 +31,12 @@ import ucLogo from '../assets/uclogo.png';
           <text x="50" y="52" font-family="serif" font-weight="bold" font-size="24" fill="#003B5C">CAMBRIDGE</text>
         </svg>
       </div>
-    </div>
+    </a>
     <div class="h-12 w-px bg-slate-200 hidden md:block"></div>
-    <h1 class="text-2xl md:text-4xl font-bold cambridge-text text-center md:text-left leading-tight">
-      Berkshire and Oxfordshire Cambridge Society
-    </h1>
+    <a href={baseUrl} class="hover:opacity-90 transition-opacity">
+      <h1 class="text-2xl md:text-4xl font-bold cambridge-text text-center md:text-left leading-tight">
+        Berkshire and Oxfordshire Cambridge Society
+      </h1>
+    </a>
   </div>
 </header>

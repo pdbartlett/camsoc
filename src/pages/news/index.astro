@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { Newspaper, Calendar, ArrowLeft, ArrowRight } from 'lucide-astro';
+import { formatDate } from '../../utils/date';
+
+const allPosts = await getCollection('posts');
+const newsPosts = allPosts
+  .filter((post) => post.data.tags.map((t: string) => t.toLowerCase()).includes('news'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<Layout
+  title="News | Berkshire and Oxfordshire Cambridge Society"
+  description="Latest news and updates from the Berkshire and Oxfordshire Cambridge Society."
+>
+  <Header />
+
+  <main class="flex-grow max-w-[1000px] mx-auto px-4 py-10 w-full">
+    <!-- Breadcrumb -->
+    <nav class="mb-8">
+      <a href={baseUrl} class="inline-flex items-center gap-1.5 font-semibold text-sm text-blue-700 hover:text-blue-900 transition-colors">
+        <ArrowLeft class="w-4 h-4" />
+        <span>Back to Home</span>
+      </a>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="flex items-center gap-4 mb-8">
+      <div class="w-12 h-12 cambridge-bg rounded-lg flex items-center justify-center flex-shrink-0">
+        <Newspaper class="w-6 h-6 text-white" />
+      </div>
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold cambridge-text">News & Announcements</h1>
+        <p class="text-slate-500 text-sm mt-1">Updates and notices for society members</p>
+      </div>
+    </div>
+
+    <!-- Posts List -->
+    {newsPosts.length > 0 ? (
+      <div class="space-y-6">
+        {newsPosts.map((post) => (
+          <article class="bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-100 p-6 md:p-8 transition-shadow">
+            <div class="flex items-center gap-2 text-xs text-slate-400 mb-2">
+              <Calendar class="w-3.5 h-3.5" />
+              <time datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date)}
+              </time>
+            </div>
+            <h2 class="text-xl md:text-2xl font-bold cambridge-text mb-2">
+              <a href={`${baseUrl}posts/${post.id}`} class="hover:underline">
+                {post.data.title}
+              </a>
+            </h2>
+            {post.data.description && (
+              <p class="text-slate-600 text-sm mb-4 leading-relaxed">
+                {post.data.description}
+              </p>
+            )}
+            <a
+              href={`${baseUrl}posts/${post.id}`}
+              class="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-900 group"
+            >
+              <span>Read full post</span>
+              <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-12 text-center">
+        <p class="text-slate-600 font-medium mb-2">No news items at present.</p>
+        <p class="text-slate-400 text-sm">Please check back soon for society announcements.</p>
+      </div>
+    )}
+  </main>
+
+  <Footer />
+</Layout>
